@@ -140,9 +140,12 @@ function draw() {
 		ghost.show()
 	})
 
-	if (tiles.every(tile => !tile.isBigDot && !tile.isDot)) gameOver(1)
-
 	if (pacman.dead()) lives > 0 ? resetPositions() : gameOver(0)
+
+	if (!stopped && tiles.every(tile => !tile.isBigDot && !tile.isDot)) {
+		gameOver(1)
+		stopped = true
+	}
 }
 
 function keyPressed() {
@@ -160,9 +163,10 @@ function resetPositions() {
 }
 
 function gameOver(val) {
+	stopped = true
 	noLoop()
-	title.innerText = !!val ? 'You win!' : 'Game Over!'
-	highscore = max(score, highscore)
+	title.innerText = val === 1 ? 'You win!' : 'Game Over!'
+	highscore = Math.max(score, highscore)
 	gameoverScreen.classList.add('active')
 	showScore.innerText = `Score: ${score}`
 	showHighscore.innerText = `Highscore: ${highscore ?? 0}`
@@ -178,6 +182,7 @@ function restart(e) {
 	dots = 0
 	buildBoard()
 	loop()
+	stopped = false
 }
 
 setInterval(() => {

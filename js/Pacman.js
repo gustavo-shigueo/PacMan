@@ -76,7 +76,9 @@ class Pacman {
 					return checkX && checkY
 				})
 
-				const freeCell = !(futureCell.isWall || futureCell.isForGhosts)
+				let freeCell = false
+				if (futureCell)
+					freeCell = !(futureCell.isWall || futureCell.isForGhosts)
 				this.velocity = freeCell ? this.turnTo : this.velocity
 			}
 		} else this.velocity = this.turnTo
