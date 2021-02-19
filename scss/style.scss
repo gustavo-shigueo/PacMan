@@ -49,3 +49,9 @@ body {
 		}
 	}
 }
+
+@media (max-height: 600px), (max-width: 600px) {
+	* {
+		transform: scale(.8);
+	}
+}
