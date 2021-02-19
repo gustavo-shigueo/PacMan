@@ -5,7 +5,23 @@
 	overflow: hidden
 }
 
-canvas, .gameover-screen {
+main {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+canvas {
+	all: initial;
+	transform: scale(.5);
+}
+
+.gameover-screen {
 	transform: scale(.5);
 }
 
@@ -60,18 +76,8 @@ body {
 }
 
 @media (max-height: 600px), (max-width: 600px) {
-	* {
-		overflow: hidden;
-	}
 	main {
-		width: 100vw;
 		height: 80vh;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		position: absolute;
-		left: 0;
-		top: 0;
 	}
 	canvas {
 		all: initial;
