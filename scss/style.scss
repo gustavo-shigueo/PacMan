@@ -11,8 +11,8 @@ canvas, .gameover-screen {
 
 body {
 	background: #000;
-	height: 100vh;
-	min-width: 100vh;
+	min-height: 100vh;
+	min-width: 100vw;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -86,7 +86,7 @@ body {
 	}
 	canvas {
 		all: initial;
-		transform: scale(.25);
+		transform: scale(.3);
 	}
 	body .gameover-screen, body .gameover-screen.active {
 		transform: scale(1);

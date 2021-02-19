@@ -1,17 +1,22 @@
-class Swipe{
+class Swipe {
 	constructor(element) {
 		// Where the player touches the screen
 		this.xDown = null
 		this.yDown = null
 
 		// Element listening for swipes
-		this.element = typeof(element) === 'string' ? document.querySelector(element) : element
+		this.element =
+			typeof element === 'string' ? document.querySelector(element) : element
 
 		// Getting the location of the touch
-		this.element.addEventListener('touchstart', function(event) {
-			this.xDown = event.touches[0].clientX
-			this.yDown = event.touches[0].clientY
-		}.bind(this), false)
+		this.element.addEventListener(
+			'touchstart',
+			function (event) {
+				this.xDown = event.touches[0].clientX
+				this.yDown = event.touches[0].clientY
+			}.bind(this),
+			false
+		)
 	}
 
 	onUp(callback) {
@@ -47,7 +52,8 @@ class Swipe{
 
 		/* Checks if the swipe was horizontal or vertical, then decides the direction
 		in the proper axis using the Diff variables */
-		if (Math.abs(this.xDiff) > Math.abs(this.yDiff)) this.xDiff > 0 ? this.onLeft() : this.onRight()
+		if (Math.abs(this.xDiff) > Math.abs(this.yDiff))
+			this.xDiff > 0 ? this.onLeft() : this.onRight()
 		else this.yDiff > 0 ? this.onUp() : this.onDown()
 
 		// Reset
@@ -56,8 +62,12 @@ class Swipe{
 	}
 
 	run() {
-		this.element.addEventListener('touchmove', function(event) {
-			this.handleTouchMove(event).bind(this)
-		}.bind(this), false)
+		this.element.addEventListener(
+			'touchmove',
+			function (event) {
+				this.handleTouchMove(event)
+			}.bind(this),
+			false
+		)
 	}
 }

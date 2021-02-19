@@ -188,29 +188,3 @@ function restart(e) {
 setInterval(() => {
 	if (pacman) pacman.state += pacman.state !== 2 ? 1 : -2
 }, 100)
-
-function touchStarted() {
-	touchCoords = []
-	if (TouchList.length !== 1) return
-	const [x, y] = [TouchList.item(0).screenX, TouchList.item(0).screenY]
-	touchCoords.push([x, y])
-}
-
-function touchMoved() {
-	if (TouchList.length !== 1) return
-	const [x, y] = [TouchList.item(0).screenX, TouchList.item(0).screenY]
-	touchCoords[1] = [x, y]
-}
-
-function touchEnded() {
-	const deltaX = touchCoords[1][0] - touchCoords[0][0]
-	const deltaY = touchCoords[1][1] - touchCoords[0][1]
-
-	if (Math.abs(deltaX) === Math.abs(deltaY)) return
-
-	if (Math.abs(deltaX) > Math.abs(deltaY)) {
-		pacman.changeDirection(deltaX > 0 ? 'ArrowRight' : 'ArrowLeft')
-	} else {
-		pacman.changeDirection(deltaY > 0 ? 'ArrowDown' : 'ArrowUp')
-	}
-}
