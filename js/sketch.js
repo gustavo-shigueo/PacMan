@@ -1,11 +1,11 @@
 function preload() {
-	img = loadImage('./assets/map.jpg')
-	sprites = loadImage('./assets/ghosts.png')
-	frightenedSprite = loadImage('./assets/frightened-ghost.png')
-	eatenSprite = loadImage('./assets/eaten.png')
-	pacmanSprite = loadImage('./assets/pacman-sprite.png')
-	font = loadFont('./assets/PressStart2P-Regular.ttf')
-	icon = loadImage('./assets/icon.png')
+	img = loadImage('./assets/images/map.jpg')
+	sprites = loadImage('./assets/images/ghosts.png')
+	frightenedSprite = loadImage('./assets/images/frightened-ghost.png')
+	eatenSprite = loadImage('./assets/images/eaten.png')
+	pacmanSprite = loadImage('./assets/images/pacman-sprite.png')
+	font = loadFont('./assets/font/PressStart2P-Regular.ttf')
+	icon = loadImage('./assets/images/icon.png')
 }
 
 function setup() {
