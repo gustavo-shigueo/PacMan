@@ -9,6 +9,7 @@ restartBtn.addEventListener('click', (e) => restart(e))
 
 // Game related global variables
 
+let touchCoords = []
 let stopped = false
 let pacman
 const gridSize = 35

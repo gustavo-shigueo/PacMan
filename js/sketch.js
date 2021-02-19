@@ -188,3 +188,25 @@ function restart(e) {
 setInterval(() => {
 	if (pacman) pacman.state += pacman.state !== 2 ? 1 : -2
 }, 100)
+
+function touchStarted() {
+	touchCoords = []
+	touchCoords.push(touches)
+}
+
+function touchMoved() {
+	touchCoords[1] = touches
+}
+
+function touchEnded() {
+	const deltaX = touchCoords[1][0] - touchCoords[0][0]
+	const deltaY = touchCoords[1][1] - touchCoords[0][1]
+
+	if (Math.abs(deltaX) === Math.abs(deltaY)) return
+
+	if (Math.abs(deltaX) > Math.abs(deltaY)) {
+		pacman.changeDirection(deltaX > 0 ? 'ArrowRight' : 'ArrowLeft')
+	} else {
+		pacman.changeDirection(deltaY > 0 ? 'ArrowDown' : 'ArrowUp')
+	}
+}
