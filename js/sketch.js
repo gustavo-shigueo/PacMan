@@ -191,11 +191,15 @@ setInterval(() => {
 
 function touchStarted() {
 	touchCoords = []
-	touchCoords.push(touches)
+	if (TouchList.length !== 1) return
+	const [x, y] = [TouchList.item(0).screenX, TouchList.item(0).screenY]
+	touchCoords.push([x, y])
 }
 
 function touchMoved() {
-	touchCoords[1] = touches
+	if (TouchList.length !== 1) return
+	const [x, y] = [TouchList.item(0).screenX, TouchList.item(0).screenY]
+	touchCoords[1] = [x, y]
 }
 
 function touchEnded() {
