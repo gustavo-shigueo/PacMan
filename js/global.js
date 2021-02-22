@@ -5,11 +5,9 @@ const showScore = document.querySelector('.score')
 const showHighscore = document.querySelector('.highscore')
 const title = document.querySelector('.title')
 
-restartBtn.addEventListener('click', (e) => restart(e))
+restartBtn.addEventListener('click', () => restart())
 
 // Game related global variables
-
-let touchCoords = []
 let stopped = false
 let pacman
 const gridSize = 35

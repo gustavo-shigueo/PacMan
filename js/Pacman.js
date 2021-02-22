@@ -40,11 +40,9 @@ class Pacman {
 	}
 
 	checkPosition() {
-		const [x, y, velX, velY] = [
+		const [x, y] = [
 			this.x + PACMAN_SPEED * this.velocity[0],
 			this.y + PACMAN_SPEED * this.velocity[1],
-			this.velocity[0],
-			this.velocity[1],
 		]
 
 		const centerX = (this.x - 37.5) % gridSize === 0
@@ -118,7 +116,9 @@ class Pacman {
 				dots++
 				if (cell.isBigDot) {
 					frightenTimer = 300
-					ghosts.forEach(ghost => ghost.setMode('frightened'))
+					ghosts
+						.filter(ghost => !(ghost.isEaten && !ghost.isFrightened))
+						.forEach(ghost => ghost.setMode('frightened'))
 					score += 50
 				} else score += 10
 				cell.isDot = false

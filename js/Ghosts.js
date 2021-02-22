@@ -5,6 +5,8 @@ class Ghosts {
 		this.isChasing = true
 		this.isEaten = false
 		this.y = gridSize * 14 + 77.5
+		this.target = [pacman.x, pacman.y]
+		this.velocity = [0, -1]
 		this.sprites = {
 			blinky: {
 				up: [35, 35, 190, 0, 160, 160],
@@ -54,11 +56,9 @@ class Ghosts {
 	}
 
 	checkPosition(velocity = this.velocity) {
-		const [x, y, velX, velY, lastX, lastY] = [
+		const [x, y, lastX, lastY] = [
 			this.x + GHOSTS_SPEED * velocity[0],
 			this.y + GHOSTS_SPEED * velocity[1],
-			velocity[0],
-			velocity[1],
 			this.lastPos[0],
 			this.lastPos[1],
 		]
@@ -69,7 +69,6 @@ class Ghosts {
 		const centerY = (this.y - 77.5) % gridSize === 0
 		const intoWall = tiles.some(tile => {
 			const { isWall, isForGhosts } = tile
-			// const myTest = test ? isForGhosts : false
 			const isClose = dist(x, y, tile.x, tile.y) < gridSize
 			return (isWall || isForGhosts) && isClose
 		})
@@ -197,6 +196,34 @@ class Ghosts {
 				break
 		}
 	}
+
+	isInGhostHouse() {
+		return (
+			this.x < 667.5 - gridSize &&
+			this.x > 352.5 + gridSize &&
+			this.y < 632.5 - gridSize &&
+			this.y > 457.5 + gridSize
+		)
+	}
+
+	cellsAheadOfPacMan(cells = 0) {
+		const {
+			x,
+			y,
+			velocity: [vX, vY],
+		} = pacman
+		const pixels = cells * gridSize
+		if (!cells) return [x, y]
+		if (pacman.velocity[1] !== -1) return [x + pixels * vX, y + pixels * vY]
+		return [x - pixels, y - pixels]
+	}
+
+	defaultTarget(offset = 0, corner = [0, 0]) {
+		this.target = this.cellsAheadOfPacMan(offset)
+		if (this.isInGhostHouse() || this.isEaten)
+			this.target = [gridSize * 13 + 37.5, gridSize * 11 + 77.5]
+		if (this.isScattering) this.target = corner
+	}
 }
 
 class Blinky extends Ghosts {
@@ -206,21 +233,10 @@ class Blinky extends Ghosts {
 		this.y = gridSize * 13 + 77.5
 		this.lastPos = [this.x, this.y]
 		this.name = 'blinky'
-		this.target = [pacman.x, pacman.y]
-		this.velocity = [0, -1]
 	}
 
 	setTarget() {
-		this.target = [pacman.x, pacman.y]
-		if (
-			this.x > 352.5 + gridSize &&
-			this.x < 667.5 - gridSize &&
-			this.y < 632.5 - gridSize &&
-			this.y > 457.5 + gridSize
-		)
-			this.target = [gridSize * 13 + 37.5, gridSize * 11 + 77.5]
-		if (this.isScattering) this.target = [947.5, 72.5]
-		if (this.isEaten) this.target = [gridSize * 13 + 37.5, gridSize * 11 + 77.5]
+		this.defaultTarget(0, [947.5, 72.5])
 		this.setVelocity()
 	}
 }
@@ -232,32 +248,10 @@ class Pinky extends Ghosts {
 		this.y = gridSize * 14 + 77.5
 		this.lastPos = [this.x, this.y]
 		this.name = 'pinky'
-		this.target = [pacman.x, pacman.y]
-		this.velocity = [0, -1]
 	}
 
 	setTarget() {
-		const directions = {
-			up: [pacman.x - 4 * gridSize, pacman.y - 4 * gridSize],
-			left: [pacman.x - 4 * gridSize, pacman.y],
-			right: [pacman.x + 4 * gridSize, pacman.y],
-			down: [pacman.x, pacman.y + 4 * gridSize],
-		}
-		if (pacman.velocity[0] === 0) {
-			this.target = pacman.velocity[1] === 1 ? directions.down : directions.up
-		} else {
-			this.target =
-				pacman.velocity[0] === 1 ? directions.right : directions.left
-		}
-		if (
-			this.x > 352.5 + gridSize &&
-			this.x < 667.5 - gridSize &&
-			this.y < 632.5 - gridSize &&
-			this.y > 457.5 + gridSize
-		)
-			this.target = [gridSize * 13 + 37.5, gridSize * 11 + 77.5]
-		if (this.isScattering) this.target = [72.5, 72.5]
-		if (this.isEaten) this.target = [gridSize * 13 + 37.5, gridSize * 11 + 77.5]
+		this.defaultTarget(4, [72.5, 72.5])
 		this.setVelocity()
 	}
 }
@@ -269,24 +263,13 @@ class Clyde extends Ghosts {
 		this.y = gridSize * 14 + 77.5
 		this.lastPos = [this.x, this.y]
 		this.name = 'clyde'
-		this.target = [pacman.x, pacman.y]
-		this.velocity = [0, -1]
 	}
 
 	setTarget() {
-		this.target = [pacman.x, pacman.y]
-		if (dist(this.x, this.y, pacman.x, pacman.y) < 8 * gridSize)
+		const pacDist = dist(this.x, this.y, pacman.x, pacman.y)
+		this.defaultTarget(4, [72.5, 1122.5])
+		if (!this.isEaten && !this.isInGhostHouse() && pacDist < 8 * gridSize)
 			this.target = [72.5, 1122.5]
-
-		if (
-			this.x > 352.5 + gridSize &&
-			this.x < 667.5 - gridSize &&
-			this.y < 632.5 - gridSize &&
-			this.y > 457.5 + gridSize
-		)
-			this.target = [gridSize * 13 + 37.5, gridSize * 11 + 77.5]
-		if (this.isScattering) this.target = [72.5, 1122.5]
-		if (this.isEaten) this.target = [gridSize * 13 + 37.5, gridSize * 11 + 77.5]
 		this.setVelocity()
 	}
 }
@@ -298,35 +281,16 @@ class Inky extends Ghosts {
 		this.y = gridSize * 14 + 77.5
 		this.lastPos = [this.x + GHOSTS_SPEED, this.y]
 		this.name = 'inky'
-		this.target = [pacman.x, pacman.y]
-		this.velocity = [-1, 0]
 	}
 
 	setTarget() {
-		const directions = {
-			up: [pacman.x - 2 * gridSize, pacman.y - 2 * gridSize],
-			left: [pacman.x - 2 * gridSize, pacman.y],
-			right: [pacman.x - 2 * gridSize, pacman.y],
-			down: [pacman.x, pacman.y + 2 * gridSize],
-		}
-		let interm = []
-		if (pacman.velocity[0] === 0) {
-			interm = pacman.velocity[1] === 1 ? directions.down : directions.up
-		} else {
-			interm = pacman.velocity[0] === 1 ? directions.right : directions.left
-		}
+		const interm = this.cellsAheadOfPacMan(2)
 		const deltaX = blinky.x - interm[0]
 		const deltaY = blinky.y - interm[1]
 		this.target = [interm[0] - deltaX, interm[1] - deltaY]
-		if (
-			this.x > 352.5 + gridSize &&
-			this.x < 667.5 - gridSize &&
-			this.y < 632.5 - gridSize &&
-			this.y > 457.5 + gridSize
-		)
-			this.target = [gridSize * 14 + 37.5, gridSize * 11 + 77.5]
+		if (this.isInGhostHouse() || this.isEaten)
+			this.target = [gridSize * 13 + 37.5, gridSize * 11 + 77.5]
 		if (this.isScattering) this.target = [947.5, 1122.5]
-		if (this.isEaten) this.target = [gridSize * 13 + 37.5, gridSize * 11 + 77.5]
 		this.setVelocity()
 	}
 }

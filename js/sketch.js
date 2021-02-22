@@ -174,7 +174,7 @@ function gameOver(val) {
 	draw()
 }
 
-function restart(e) {
+function restart() {
 	score = 0
 	lives = 3
 	tiles = []
