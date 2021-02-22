@@ -163,6 +163,7 @@ function resetPositions() {
 }
 
 function gameOver(val) {
+	scoreMultiplierExponent = 0
 	stopped = true
 	noLoop()
 	title.innerText = val === 1 ? 'You win!' : 'Game Over!'
